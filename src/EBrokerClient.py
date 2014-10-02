@@ -1,12 +1,11 @@
 import abc
-import re
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-
 from bs4 import BeautifulSoup
-
 from BrokerRequest import BrokerRequest
+
+import src.utils as utils
 
 class EBrokerClient:
     __metaclass__ = abc.ABCMeta
@@ -14,11 +13,10 @@ class EBrokerClient:
     def __init__(self, executable, login, password):
         self._browser = self._create_browser(executable)
         self.login(login, password)
-        return
 
     @abc.abstractmethod
     def _create_browser(self, executable):
-        return
+        pass
 
     def login(self, login, password):
             self._browser.get("https://www.fio.cz/e-broker/e-broker.cgi")
@@ -38,8 +36,8 @@ class EBrokerClient:
         requests = []
         html = self._browser.execute_script("return document.getElementById('pokyny_full_table').innerHTML")
         soup = BeautifulSoup(html)
-        for tr in soup.find_all('tr'):
-            tds = tr.find_all('td')
+        for tr in soup.find_all("tr"):
+            tds = tr.find_all("td")
             if len(tds) > 0:
                 symbol = tds[1].contents[0].contents[0]
                 price = tds[4].contents[0]
@@ -54,19 +52,16 @@ class EBrokerClient:
 
         html = self._browser.execute_script("return document.getElementById('portfolio_table').innerHTML")
         soup = BeautifulSoup(html)
-        trs = soup.find_all('tr')
+        trs = soup.find_all("tr")
         for i in range(2, len(trs) - 1):  # skip first two rows (table header) and the last one (summary)
-            tds = trs[i].find_all('td')
-            if len(tds) > 0:
-                ticker = self._get_ticker_from_link(tds[2].contents[0]['href'])
+            tds = trs[i].find_all("td")
+            if len(tds) >= 4 :
+                ticker = utils.get_ticker_from_link(tds[2].contents[0]['href'])
                 symbol = tds[2].contents[0].contents[0]
                 amount = tds[3].contents[0]
                 price = tds[4].contents[0].contents[0]
                 print "%i %s %s %s %s" % (i, ticker, symbol, amount, price)
 
-    def _get_ticker_from_link(self, link):
-        m = re.search("\d{3,}", link)
-        return m.group(0)
 
 class PhantomJSClient(EBrokerClient):
     def _create_browser(self, phantom_exec):
