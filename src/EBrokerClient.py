@@ -1,4 +1,5 @@
 import abc
+import re
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -46,6 +47,26 @@ class EBrokerClient:
                 amount_satisfied =  tds[6].contents[0]
                 requests.append(BrokerRequest(symbol, price, amount, amount_satisfied))
         return requests
+
+    def get_portfolio(self):
+        self._browser.get("https://www.fio.cz/e-broker/e-portfolio.cgi")
+        assert "Portfolio/Stav" in self._browser.title
+
+        html = self._browser.execute_script("return document.getElementById('portfolio_table').innerHTML")
+        soup = BeautifulSoup(html)
+        trs = soup.find_all('tr')
+        for i in range(len(trs) - 2):
+            tds = trs[i].find_all('td')
+            if len(tds) > 0:
+                ticker = self._get_ticker_from_link(tds[2].contents[0]['href'])
+                symbol = tds[2].contents[0].contents[0]
+                amount = tds[3].contents[0]
+                price = tds[4].contents[0].contents[0]
+                print "%i %s %s %s %s" % (i, ticker, symbol, amount, price)
+
+    def _get_ticker_from_link(self, link):
+        m = re.search("\d{3,}", link)
+        return m.group(0)
 
 class PhantomJSClient(EBrokerClient):
     def _create_browser(self, phantom_exec):
