@@ -55,7 +55,7 @@ class EBrokerClient:
         html = self._browser.execute_script("return document.getElementById('portfolio_table').innerHTML")
         soup = BeautifulSoup(html)
         trs = soup.find_all('tr')
-        for i in range(len(trs) - 2):
+        for i in range(2, len(trs) - 1):  # skip first two rows (table header) and the last one (summary)
             tds = trs[i].find_all('td')
             if len(tds) > 0:
                 ticker = self._get_ticker_from_link(tds[2].contents[0]['href'])
