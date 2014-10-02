@@ -5,7 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 from BrokerRequest import BrokerRequest
 
-import src.utils as utils
+import src.utils as u
 
 class EBrokerClient:
     __metaclass__ = abc.ABCMeta
@@ -40,9 +40,9 @@ class EBrokerClient:
             tds = tr.find_all("td")
             if len(tds) > 0:
                 symbol = tds[1].contents[0].contents[0]
-                price = tds[4].contents[0]
-                amount = tds[5].contents[0]
-                amount_satisfied =  tds[6].contents[0]
+                price = u.str2float(tds[4].contents[0])
+                amount = u.str2float(tds[5].contents[0])
+                amount_satisfied = u.str2float(tds[6].contents[0])
                 requests.append(BrokerRequest(symbol, price, amount, amount_satisfied))
         return requests
 
@@ -56,10 +56,10 @@ class EBrokerClient:
         for i in range(2, len(trs) - 1):  # skip first two rows (table header) and the last one (summary)
             tds = trs[i].find_all("td")
             if len(tds) >= 4 :
-                ticker = utils.get_ticker_from_link(tds[2].contents[0]['href'])
+                ticker = int(u.get_ticker_from_link(tds[2].contents[0]['href']))
                 symbol = tds[2].contents[0].contents[0]
-                amount = tds[3].contents[0]
-                price = tds[4].contents[0].contents[0]
+                amount = u.str2float(tds[3].contents[0])
+                price = u.str2float(tds[4].contents[0].contents[0])
                 print "%i %s %s %s %s" % (i, ticker, symbol, amount, price)
 
 
