@@ -1,4 +1,5 @@
 import abc
+import os
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -38,12 +39,13 @@ class EBrokerClient:
         soup = BeautifulSoup(html)
         for tr in soup.find_all("tr"):
             tds = tr.find_all("td")
-            if len(tds) > 0:
+            if len(tds) >= 6:
+                ticker = int(u.get_ticker_from_link(tds[1].contents[0]['href']))
                 symbol = tds[1].contents[0].contents[0]
                 price = u.str2float(tds[4].contents[0])
                 amount = u.str2float(tds[5].contents[0])
                 amount_satisfied = u.str2float(tds[6].contents[0])
-                requests.append(BrokerRequest(symbol, price, amount, amount_satisfied))
+                requests.append(BrokerRequest(ticker, price, amount, symbol, amount_satisfied))
         return requests
 
     def get_portfolio(self):
@@ -62,6 +64,21 @@ class EBrokerClient:
                 price = u.str2float(tds[4].contents[0].contents[0])
                 print "%i %s %s %s %s" % (i, ticker, symbol, amount, price)
 
+    def send_request(self, request):
+        self._browser.get("https://www.fio.cz/e-broker/e-pokyn_univ.cgi?ceninaId=%i&smer=%i" % (request.ticker, request.req_type))
+        #assert "???" in self._browser.title #TODO add assert
+        self._browser.find_element_by_name("pocet").send_keys(request.amount)
+        self._browser.find_element_by_name("cena").send_keys(request.price)
+        valid_till_element = self._browser.find_element_by_name("platnyDo")
+        valid_till_element.clear()
+        valid_till_element.send_keys(u.shift_today(14))
+        #switch to RMS
+        self._browser.find_element_by_xpath('//select[@id="trh"]/option[@value="RMS"]').click()
+        self._browser.find_element_by_id("easyClick").click()
+        self._browser.find_element_by_id("buttonValidate").click()
+        #assert "???" in self._browser.title #TODO add assert
+        self._browser.find_element_by_xpath('//input[@value="Odeslat"]').click()
+        #assert "???" in self._browser.title #TODO add assert
 
 class PhantomJSClient(EBrokerClient):
     def _create_browser(self, phantom_exec):
