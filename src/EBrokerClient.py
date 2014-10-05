@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import abc
 import os
 
@@ -35,6 +37,7 @@ class EBrokerClient:
         assert "Pokyny" in self._browser.title
 
         requests = []
+        #TODO - why? just use get_element on _browser
         html = self._browser.execute_script("return document.getElementById('pokyny_full_table').innerHTML")
         soup = BeautifulSoup(html)
         for tr in soup.find_all("tr"):
@@ -79,6 +82,23 @@ class EBrokerClient:
         #assert "???" in self._browser.title #TODO add assert
         self._browser.find_element_by_xpath('//input[@value="Odeslat"]').click()
         #assert "???" in self._browser.title #TODO add assert
+
+    def get_money(self):
+        self._browser.get("https://www.fio.cz/e-broker/e-penize.cgi")
+        assert u"Peníze" in self._browser.title
+
+        money = []
+        html = self._browser.find_element_by_id("penize_table").get_attribute("innerHTML")
+        soup = BeautifulSoup(html)
+        trs = soup.find_all("tr")
+        for i in range(2, len(trs)):
+            tds = trs[i].find_all("td")
+            if len(tds) >= 9:
+                currency = tds[2].contents[0]
+                free_money = u.str2float(tds[8].contents[0])
+                #TODO money object
+                money.append([currency, free_money])
+        return money
 
 class PhantomJSClient(EBrokerClient):
     def _create_browser(self, phantom_exec):
