@@ -47,3 +47,12 @@ def sleep(seconds):
     
 def sort_requests_by_amount(requests, reverse = True):
     return sorted(requests, key = lambda request: request.amount, reverse = reverse)
+
+def sort_requests_by_price(requests, reverse = True):
+    return sorted(requests, key = lambda request: request.price, reverse = reverse)
+
+def get_sell_requests(requests):
+    return filter(lambda req: req.req_type == BrokerRequest.SELL, requests)
+
+def get_buy_requests(requests):
+    return filter(lambda req: req.req_type == BrokerRequest.BUY, requests)
