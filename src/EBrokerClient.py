@@ -6,7 +6,9 @@ import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
+
 from BrokerRequest import BrokerRequest
+from Money import Money
 
 import src.utils as u
 
@@ -97,8 +99,7 @@ class EBrokerClient:
             if len(tds) >= 9:
                 currency = tds[2].contents[0]
                 free_money = u.str2float(tds[8].contents[0])
-                #TODO money object
-                money.append([currency, free_money])
+                money.append(Money(currency, free_money))
         return money
 
 class PhantomJSClient(EBrokerClient):
