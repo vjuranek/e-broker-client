@@ -8,6 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
 from BrokerRequest import BrokerRequest
+from Config import Config
 from Money import Money
 
 import src.utils as u
@@ -15,9 +16,11 @@ import src.utils as u
 class EBrokerClient:
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, executable, login, password):
+    def __init__(self, executable, config_file):
         self._browser = self._create_browser(executable)
-        self.login(login, password)
+        self._config = Config(config_file)
+        credentials = self._config.credentials()
+        self.login(credentials[0], credentials[1])
 
     @abc.abstractmethod
     def _create_browser(self, executable):
