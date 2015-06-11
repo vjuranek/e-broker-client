@@ -16,7 +16,7 @@ import src.utils as u
 class EBrokerClient:
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, executable, config_file):
+    def __init__(self, executable, config_file = None):     
         self._browser = self._create_browser(executable)
         self._config = Config(config_file)
         credentials = self._config.credentials()
