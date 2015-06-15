@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
 from BrokerRequest import BrokerRequest
-from Config import Config
+from Config import Config, Credentials
 from Money import Money
 
 import src.utils as u
@@ -20,7 +20,7 @@ class EBrokerClient:
         self._browser = self._create_browser(executable)
         self._config = Config(config_file)
         credentials = self._config.credentials()
-        self.login(credentials[0], credentials[1])
+        self.login(credentials.login, credentials.password)
 
     @abc.abstractmethod
     def _create_browser(self, executable):

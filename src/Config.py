@@ -1,5 +1,8 @@
 import os
+import collections
 import ConfigParser
+
+Credentials = collections.namedtuple("Credentials", "login password")
 
 class Config:
 
@@ -17,4 +20,4 @@ class Config:
         self.__config.read(self.config_file)
 
     def credentials(self):
-        return (self.__config.get(Config.CREDENTIALS,Config.LOGIN), self.__config.get(Config.CREDENTIALS,Config.PASSWORD))
+        return Credentials(self.__config.get(Config.CREDENTIALS,Config.LOGIN), self.__config.get(Config.CREDENTIALS,Config.PASSWORD))
