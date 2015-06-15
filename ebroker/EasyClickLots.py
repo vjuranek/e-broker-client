@@ -2,7 +2,7 @@ import httplib2
 
 from bs4 import BeautifulSoup
 
-import src.utils as utils
+import ebroker.utils as utils
 
 class EasyClickLots:
     

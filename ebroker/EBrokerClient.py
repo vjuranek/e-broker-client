@@ -11,7 +11,7 @@ from BrokerRequest import BrokerRequest
 from Config import Config, Credentials
 from Money import Money
 
-import src.utils as u
+import ebroker.utils as u
 
 class EBrokerClient:
     __metaclass__ = abc.ABCMeta
