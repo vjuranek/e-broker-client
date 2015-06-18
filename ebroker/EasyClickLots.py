@@ -9,6 +9,8 @@ class EasyClickLots:
     lot_url = "http://www.rmsystem.cz/burza-sluzby/typy-obchodu/pokyn-easyclick"
     lot_table_id = "ec-lot"
 
+    CEZ = 11392
+
     def __init__(self):
         self._lots = self.load_lots()
 
@@ -56,4 +58,9 @@ class EClot:
         return self._lot
 
     def round_lots(self, amount):
+        '''
+        Round the amount always DOWN based on the minimum EC lot amount.
+        Returned value is maximum multiple of EC lot, which is less or equal than given amount.
+        E.g. if EC lot is 50, than 80 will be rounded to 50, 120 to 100 etc.
+        '''
         return (amount // self._lot) * self._lot
