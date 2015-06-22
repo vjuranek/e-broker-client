@@ -7,9 +7,9 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
-from BrokerRequest import BrokerRequest
-from Config import Config, Credentials
-from Money import Money
+from ebroker.BrokerRequest import BrokerRequest
+from ebroker.Config import Config, Credentials
+from ebroker.Money import Money
 
 import ebroker.utils as u
 
