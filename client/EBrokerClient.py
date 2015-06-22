@@ -24,7 +24,7 @@ class EBrokerClient:
 
     @abc.abstractmethod
     def _create_browser(self, executable):
-        pass
+        raise NotImplementedError("Called method is not implemented")
 
     def login(self, login, password):
             self._browser.get("https://www.fio.cz/e-broker/e-broker.cgi")
