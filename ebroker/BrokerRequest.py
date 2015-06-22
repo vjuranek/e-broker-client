@@ -37,3 +37,10 @@ class BrokerRequest:
 
     def is_satisfied(self):
         return (self._amount - self._amount_satisfied) == 0
+
+    def is_nonempty(self):
+        '''
+        Returns true if request did anything, i.e. if at least some stocks were sold or bought.
+        Typically empty requests are those, which were rejected, canceled or cance requests themselves.
+        '''
+        return self._amount_satisfied != 0

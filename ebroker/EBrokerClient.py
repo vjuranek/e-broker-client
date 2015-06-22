@@ -57,6 +57,13 @@ class EBrokerClient:
                 requests.append(BrokerRequest(ticker, price, amount, symbol, amount_satisfied))
         return requests
 
+    def get_nonepmty_requests(self):
+        requests = self.get_broker_requests()
+        for req in requests:
+            if req.is_nonempty():
+                yield req
+                
+    
     def get_portfolio(self):
         self._browser.get("https://www.fio.cz/e-broker/e-portfolio.cgi")
         assert "Portfolio/Stav" in self._browser.title
