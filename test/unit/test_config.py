@@ -15,6 +15,11 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(cred.login, 'test_login')
         self.assertEqual(cred.password, 'test_password')
 
+
+    def test_db_config(self):
+        sqlite_conf = self.config.sqlite_options()
+        self.assertEqual(sqlite_conf.db_file, "test_location")
+        
         
 if __name__ == '__main__':
     unittest.main()
