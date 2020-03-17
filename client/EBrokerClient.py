@@ -78,7 +78,7 @@ class EBrokerClient:
                 symbol = tds[2].contents[0].contents[0]
                 amount = u.str2float(tds[3].contents[0])
                 price = u.str2float(tds[4].contents[0].contents[0])
-                print "%i %s %s %s %s" % (i, ticker, symbol, amount, price)
+                print("%i %s %s %s %s" % (i, ticker, symbol, amount, price))
 
     def send_request(self, request):
         self._browser.get("https://www.fio.cz/e-broker/e-pokyn_univ.cgi?ceninaId=%i&smer=%i" % (request.ticker, request.req_type))

@@ -1,6 +1,6 @@
 import os
 import collections
-import ConfigParser
+import configparser
 
 Credentials = collections.namedtuple("Credentials", "login password")
 SQLiteConf = collections.namedtuple("SQLiteConf", "db_file")
@@ -20,7 +20,7 @@ class Config:
             self.config_file = os.path.join(home_dir, ".ebroker", "main.conf")
         else:    
             self.config_file = config_file
-        self.__config = ConfigParser.ConfigParser()
+        self.__config = configparser.ConfigParser()
         self.__config.read(self.config_file)
 
     def credentials(self):

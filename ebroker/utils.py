@@ -41,7 +41,7 @@ def shift_today(day_delta):
     return "%i.%i.%i" % (day_shifted.day, day_shifted.month, day_shifted.year)
 
 def sleep(seconds):
-    print "Sleeping for %i seconds" % seconds
+    print("Sleeping for %i seconds" % seconds)
     time.sleep(seconds)
     
     
