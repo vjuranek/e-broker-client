@@ -128,4 +128,6 @@ class ChromeClient(EBrokerClient):
 
 class FirefoxClient(EBrokerClient):
     def _create_browser(self, gecko_driver):
-        return webdriver.Firefox()
+        options = webdriver.firefox.options.Options()
+        options.headless = True
+        return webdriver.Firefox(options=options)
