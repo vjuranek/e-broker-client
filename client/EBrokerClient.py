@@ -44,7 +44,7 @@ class EBrokerClient:
         requests = []
         #html = self._browser.execute_script("return document.getElementById('pokyny_full_table').innerHTML")
         html = self._browser.find_element_by_id("pokyny_full_table").get_attribute("innerHTML")
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, features="lxml")
         trs = soup.find_all("tr")
         for i in range(2, len(trs)): 
             tds = trs[i].find_all("td")
