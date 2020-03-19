@@ -124,3 +124,8 @@ class ChromeClient(EBrokerClient):
         opts.add_experimental_option("prefs", prefs)
         browser = webdriver.Chrome(executable_path=chrome_driver, chrome_options=opts)
         return browser
+
+
+class FirefoxClient(EBrokerClient):
+    def _create_browser(self, gecko_driver):
+        return webdriver.Firefox()
