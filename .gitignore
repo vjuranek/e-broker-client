@@ -55,3 +55,6 @@ target/
 
 # Emacs
 *~
+
+# Idead
+.idea/
