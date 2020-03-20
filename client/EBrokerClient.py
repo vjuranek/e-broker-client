@@ -4,15 +4,15 @@ import abc
 import os
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup, element
 
 from ebroker.BrokerRequest import BrokerRequest
-from ebroker.Config import Config, Credentials
+from ebroker.Config import Config
 from ebroker.Money import Money
 from ebroker.Trade import Trade
 
 import ebroker.utils as u
+
 
 class EBrokerClient:
     __metaclass__ = abc.ABCMeta
@@ -28,12 +28,12 @@ class EBrokerClient:
         raise NotImplementedError("Called method is not implemented")
 
     def login(self, login, password):
-            self._browser.get("https://www.fio.cz/e-broker/e-broker.cgi")
-            assert "e-Broker: Login" in self._browser.title
-            self._browser.find_element_by_name("LOGIN_USERNAME").send_keys(login)
-            self._browser.find_element_by_name("LOGIN_PASSWORD").send_keys(password)
-            self._browser.find_element_by_name("SUBMIT").click()
-            assert "Portfolio/Stav" in self._browser.title
+        self._browser.get("https://www.fio.cz/e-broker/e-broker.cgi")
+        assert "e-Broker: Login" in self._browser.title
+        self._browser.find_element_by_name("LOGIN_USERNAME").send_keys(login)
+        self._browser.find_element_by_name("LOGIN_PASSWORD").send_keys(password)
+        self._browser.find_element_by_name("SUBMIT").click()
+        assert "Portfolio/Stav" in self._browser.title
 
     def close(self):
         self._browser.close()
@@ -63,8 +63,7 @@ class EBrokerClient:
         for req in requests:
             if req.is_nonempty():
                 yield req
-                
-    
+
     def get_portfolio(self):
         self._browser.get("https://www.fio.cz/e-broker/e-portfolio.cgi")
         assert "Portfolio/Stav" in self._browser.title
