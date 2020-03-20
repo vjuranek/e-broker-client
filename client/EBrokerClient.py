@@ -5,11 +5,12 @@ import os
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, element
 
 from ebroker.BrokerRequest import BrokerRequest
 from ebroker.Config import Config, Credentials
 from ebroker.Money import Money
+from ebroker.Trade import Trade
 
 import ebroker.utils as u
 
@@ -111,6 +112,27 @@ class EBrokerClient:
                 free_money = u.str2float(tds[8].contents[0])
                 money.append(Money(currency, free_money))
         return money
+
+    def trades(self):
+        # TODO: use csv export on https://www.fio.cz/e-broker/e-obchody.cgi?export=1
+        self._browser.get("https://www.fio.cz/e-broker/e-obchody.cgi")
+        assert "Obchody" in self._browser.title
+
+        trades = []
+        html = self._browser.find_element_by_id("obchody_full_table").get_attribute("innerHTML")
+        soup = BeautifulSoup(html, features="lxml")
+        trs = soup.find_all("tr")
+        for i in range(2, len(trs) - 1):
+            tds = trs[i].find_all("td")
+            date = tds[0].contents[0]
+            symbol = tds[2].contents[0].contents[0] if isinstance(tds[2].contents[0], element.Tag) else ""
+            price = tds[3].contents[0]
+            amount = tds[4].contents[0]
+            currency = tds[5].contents[0]
+            trades.append(Trade(date, symbol, price, amount, currency))
+
+        return trades
+
 
 class PhantomJSClient(EBrokerClient):
     def _create_browser(self, phantom_exec):
