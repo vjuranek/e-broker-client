@@ -2,7 +2,7 @@ class PortfolioItem:
     def __init__(self, ticker, symbol, amount, price):
         self._ticker = ticker
         self._symbol = symbol
-        self._amount  = amount
+        self._amount = amount
         self._price = price
 
     @property

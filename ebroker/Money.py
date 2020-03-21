@@ -1,5 +1,5 @@
 class Money:
-    
+
     def __init__(self, currency, free_money):
         self._currency = currency
         self._free_money = free_money
