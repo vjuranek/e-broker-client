@@ -35,13 +35,6 @@ def str2float(to_convert):
     return num
 
 
-def shift_day(day_str, day_delta):
-    day_elem = day_str.parse(".")
-    day = date(day_elem[2], day_elem[1], day_elem[0])
-    day_shifted = day + timeshift(days=day_delta)
-    return "%i.%i.%i" % (day_shifted.day, day_shifted.month, day_shifted.year)
-
-
 def shift_today(day_delta):
     day_shifted = date.today() + timedelta(days=day_delta)
     return "%i.%i.%i" % (day_shifted.day, day_shifted.month, day_shifted.year)
@@ -58,11 +51,3 @@ def sort_requests_by_amount(requests, reverse=True):
 
 def sort_requests_by_price(requests, reverse=True):
     return sorted(requests, key=lambda request: request.price, reverse=reverse)
-
-
-def get_sell_requests(requests):
-    return filter(lambda req: req.req_type == BrokerRequest.SELL, requests)
-
-
-def get_buy_requests(requests):
-    return filter(lambda req: req.req_type == BrokerRequest.BUY, requests)
