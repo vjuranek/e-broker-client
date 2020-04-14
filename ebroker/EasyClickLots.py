@@ -7,7 +7,7 @@ import ebroker.utils as utils
 
 class EasyClickLots:
 
-    lot_url = "http://www.rmsystem.cz/burza-sluzby/typy-obchodu/pokyn-easyclick"
+    lot_url = "https://www.rmsystem.cz/burza-sluzby/typy-obchodu/pokyn-easyclick"
     lot_table_id = "ec-lot"
 
     CEZ = 11392
